@@ -8,7 +8,6 @@
 
 import ClockKit
 
-
 class ComplicationController: NSObject, CLKComplicationDataSource {
     
     let data = HelloWorldData()
@@ -36,12 +35,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
         // Call the handler with the current timeline entry
-//        handler(graphicRectangular)
+        //handler(graphicRectangular)
         handler(createTimelineEntry(forComplication: complication, date: Date()))
     }
     
     private func createNewEntry(info: String, forComplication complication: CLKComplication, date: Date) {
-        
         
     }
     
