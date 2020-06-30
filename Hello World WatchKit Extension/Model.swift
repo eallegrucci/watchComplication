@@ -6,14 +6,58 @@
 //  Copyright © 2020 Emma Allegrucci. All rights reserved.
 //
 
-import Foundation
+// This file was generated from JSON Schema using quicktype, do not modify it directly.
+// To parse the JSON, add this file to your project and do:
+//
+//let firebase = try? newJSONDecoder().decode(Firebase.self, from: jsonData)
 
+import Foundation
+import Combine
+
+// MARK: - Firebase
 struct Firebase: Codable {
     var name: String?
     var createTime, updateTime: String?
     var fields: FirebaseFields
 }
 
+//Tasks Fields:
+struct FirebaseTask: Codable {
+    var name: String?
+    var createTime, updateTime: String?
+    var fields: FirebaseTaskFields
+}
+
+struct FirebaseTaskFields: Codable {
+    var actionsTasks: ActionsTasks
+    var completed: HavePic
+    var title: EmailID
+    
+    enum CodingKeys: String, CodingKey {
+        case actionsTasks = "actions&tasks"
+        case completed
+        case title
+    }
+}
+
+struct FirebaseStep: Codable {
+    var name: String?
+    var createTime, updateTime: String?
+    var fields: FirebaseStepFields
+}
+
+struct FirebaseStepFields: Codable {
+    var instructionsSteps: ActionsTasks
+    //var completed: HavePic
+    var title: EmailID
+    
+    enum CodingKeys: String, CodingKey {
+        case instructionsSteps = "instructions&steps"
+        //case completed = "completed"
+        case title
+    }
+}
+// MARK: - FirebaseFields
 struct FirebaseFields: Codable {
     var emailID, lastName, firstName: EmailID
     var aboutMe: AboutMe
@@ -82,6 +126,46 @@ struct Value: Codable {
 // MARK: - ValueMapValue
 struct ValueMapValue: Codable {
     var fields: FluffyFields
+}
+
+struct ActionsTasks: Codable {
+    var arrayValue: ActionsTasksArrayValue
+}
+
+// MARK: - ArrayValue
+struct ActionsTasksArrayValue: Codable {
+    var values: [ValueTask]
+}
+
+// MARK: - Value
+struct ValueTask: Codable {
+    var mapValue: TaskValueMapValue
+}
+
+// MARK: - ValueMapValue
+struct TaskValueMapValue: Codable {
+    var fields: TaskFluffyFields
+}
+
+struct TaskFluffyFields: Codable {
+    var availableStartTime, availableEndTime: EmailID
+    var datetimeStarted, datetimeCompleted: EmailID
+    var isAvailable, isComplete: HavePic
+    //var isMustDo: EmailID
+    //var isSublistAvailable: HavePic
+    var photo, id, title: EmailID
+    
+    enum CodingKeys: String, CodingKey {
+        //case isSublistAvailable = "is_sublist_available"
+        case isComplete = "is_complete"
+        case availableStartTime = "available_start_time"
+        case isAvailable = "is_available"
+        //case isMustDo = "is_must_do"
+        case availableEndTime = "available_end_time"
+        case datetimeCompleted = "datetime_completed"
+        case datetimeStarted = "datetime_started"
+        case photo, id, title
+    }
 }
 
 // MARK: - FluffyFields
@@ -164,11 +248,19 @@ struct StickyFields: Codable {
     }
 }
 
-class FirebaseServices{
-
+class FirebaseServices: ObservableObject{
+    
+    @Published var data = [Value]()
+    //@Published var goalsSubtasks = [String: ValueTask]()
+    init() {
+        getFirebaseData(){
+            (data) in self.data = data
+        }
+    }
+    
     func getFirebaseData(completion: @escaping ([Value]) -> ()) {
             guard let url = URL(string: "https://firestore.googleapis.com/v1/projects/project-caitlin-c71a9/databases/(default)/documents/users/anaqPz2mmo3tSGU4lgB4") else { return }
-            
+            print("here")
             URLSession.shared.dataTask(with: url) { (data, _, _) in
                 let data = try! JSONDecoder().decode(Firebase.self, from: data!)
                 DispatchQueue.main.async {
@@ -177,6 +269,19 @@ class FirebaseServices{
             }
         .resume()
     }
-
-
+    
+    func getFirebaseTasks(goalID: String, completion: @escaping ([ValueTask]) -> ()) {
+        var TaskUrl = "https://firestore.googleapis.com/v1/projects/project-caitlin-c71a9/databases/(default)/documents/users/anaqPz2mmo3tSGU4lgB4/goals&routines/"
+        TaskUrl.append(goalID)
+        print(TaskUrl)
+        guard let url = URL(string: TaskUrl) else { return }
+            
+            URLSession.shared.dataTask(with: url) { (data, _, _) in
+                let data = try! JSONDecoder().decode(FirebaseTask.self, from: data!)
+                DispatchQueue.main.async {
+                    completion(data.fields.actionsTasks.arrayValue.values)
+                }
+            }
+        .resume()
+    }
 }

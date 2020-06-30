@@ -19,6 +19,7 @@
 		04C369EA24A6710000B578B9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04C369E924A6710000B578B9 /* Preview Assets.xcassets */; };
 		04C369FA24A6712400B578B9 /* HelloWorldData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C369F924A6712400B578B9 /* HelloWorldData.swift */; };
 		2B3BA39924A981AC00D3F566 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B3BA39824A981AC00D3F566 /* Model.swift */; };
+		2BD5536824AA179E00604F8C /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD5536724AA179E00604F8C /* RootView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		04C369EB24A6710000B578B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04C369F924A6712400B578B9 /* HelloWorldData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloWorldData.swift; sourceTree = "<group>"; };
 		2B3BA39824A981AC00D3F566 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		2BD5536724AA179E00604F8C /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 				04C369E224A670FF00B578B9 /* ExtensionDelegate.swift */,
 				2B3BA39824A981AC00D3F566 /* Model.swift */,
 				04C369E424A670FF00B578B9 /* ComplicationController.swift */,
+				2BD5536724AA179E00604F8C /* RootView.swift */,
 				04C369E624A6710000B578B9 /* Assets.xcassets */,
 				04C369EB24A6710000B578B9 /* Info.plist */,
 				04C369E824A6710000B578B9 /* Preview Content */,
@@ -277,6 +280,7 @@
 				04C369E524A670FF00B578B9 /* ComplicationController.swift in Sources */,
 				04C369DF24A670FF00B578B9 /* ContentView.swift in Sources */,
 				2B3BA39924A981AC00D3F566 /* Model.swift in Sources */,
+				2BD5536824AA179E00604F8C /* RootView.swift in Sources */,
 				04C369E324A670FF00B578B9 /* ExtensionDelegate.swift in Sources */,
 				04C369FA24A6712400B578B9 /* HelloWorldData.swift in Sources */,
 			);
