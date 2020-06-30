@@ -40,7 +40,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         if complication.family == .graphicRectangular {
             let percentage: Float = 25/60
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "hh:mm"
+            dateFormatter.dateFormat = "hh:mm:ss"
             let timeString = dateFormatter.string(from: data.listOfData[0].startTime) + " - " + dateFormatter.string(from:  data.listOfData[0].endTime)
             let graphicRectangular = CLKComplicationTemplateGraphicRectangularTextGauge()
             graphicRectangular.headerTextProvider = CLKSimpleTextProvider(text: data.listOfData[0].name)
@@ -56,47 +56,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         }
     }
     
-    func getList() -> [CLKComplicationTimelineEntry] {
-        
-        var timeLineEntries = [CLKComplicationTimelineEntry]()
-        
-        for index in 1...data.listOfData.count {
-            let percentage: Float = 25/60
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "hh:mm"
-            let timeString = dateFormatter.string(from: data.listOfData[index].startTime) + " - " + dateFormatter.string(from:  data.listOfData[index].endTime)
-            let graphicRectangular = CLKComplicationTemplateGraphicRectangularTextGauge()
-            graphicRectangular.headerTextProvider = CLKSimpleTextProvider(text: data.listOfData[index].name)
-            graphicRectangular.body1TextProvider = CLKSimpleTextProvider(text: timeString)
-            graphicRectangular.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColors: [UIColor.green], gaugeColorLocations: nil, fillFraction: percentage)
-            let template = graphicRectangular
-            let timelineEntry = CLKComplicationTimelineEntry(date: data.listOfData[index].startTime, complicationTemplate: template)
-            timeLineEntries.append(timelineEntry)
-        }
-        
-        return timeLineEntries
-    }
-    
     private func createNewEntry(info: String, forComplication complication: CLKComplication, date: Date) {
         
     }
-    
-//    private func createTimelineEntry(forComplication complication: CLKComplication, date: Date) -> CLKComplicationTimelineEntry {
-//        // Get the correct template based on the complication.
-//        let percentage: Float = 25/60
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "hh:mm"
-//        let timeString = dateFormatter.string(from: data.listOfData[0].startTime) + " - " + dateFormatter.string(from:  data.listOfData[0].endTime)
-//        let graphicRectangular = CLKComplicationTemplateGraphicRectangularTextGauge()
-//        graphicRectangular.headerTextProvider = CLKSimpleTextProvider(text: "hello")
-//        graphicRectangular.body1TextProvider = CLKSimpleTextProvider(text: "hello")
-//        graphicRectangular.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColors: [UIColor.green], gaugeColorLocations: nil, fillFraction: percentage)
-//        let template = graphicRectangular
-//
-//
-//        // Use the template and date to create a timeline entry.
-//        return CLKComplicationTimelineEntry(date: date, complicationTemplate: template)
-//    }
     
     func getTimelineEntries(for complication: CLKComplication,
                             after date: Date,
@@ -125,7 +87,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         for index in 1...(data.listOfData.count-1) {
             let percentage: Float = 25/60
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "hh:mm"
+            dateFormatter.dateFormat = "hh:mm:ss"
             let timeString = dateFormatter.string(from: data.listOfData[index].startTime) + " - " + dateFormatter.string(from:  data.listOfData[index].endTime)
             let graphicRectangular = CLKComplicationTemplateGraphicRectangularTextGauge()
             graphicRectangular.headerTextProvider = CLKSimpleTextProvider(text: data.listOfData[index].name)

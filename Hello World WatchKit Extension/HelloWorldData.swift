@@ -29,36 +29,13 @@ class HelloWorldData: ObservableObject {
     init() {
         let date = Date()
         
-        let data1 = Data(name: "Goal 1", startTime: date, endTime: date.advanced(by: 1*60))
+        let data1 = Data(name: "Goal 1", startTime: date, endTime: date.advanced(by: 30))
         self.listOfData.append(data1)
         
-        let data2 = Data(name: "Goal 2", startTime: date.advanced(by: 1*60), endTime: date.advanced(by: 2*60))
+        let data2 = Data(name: "Goal 2", startTime: date.advanced(by: 30), endTime: date.advanced(by: 60))
         self.listOfData.append(data2)
         
-        let data3 = Data(name: "Goal 3", startTime: date.advanced(by: 2*60), endTime: date.advanced(by: 3*60))
+        let data3 = Data(name: "Goal 3", startTime: date.advanced(by: 60), endTime: date.advanced(by: 90))
         self.listOfData.append(data3)
     }
 }
-    
-    
-//    @Published public var currentInfo: String = ""
-    
-    // A sink that is also called whenever the currentDrinks array changes.
-//    var updateSink: AnyCancellable!
-    
-//    init() {
-//
-//        // Add a subscriber to currentDrinks that responds whenever currentDrinks changes.
-//        updateSink = $currentInfo.sink { [unowned self] _ in
-//
-//            // Update any complications on active watch faces.
-//            let server = CLKComplicationServer.sharedInstance()
-//            for complication in server.activeComplications ?? [] {
-//                server.reloadTimeline(for: complication)
-//            }
-//        }
-//    }
-    
-//    deinit {
-//        updateSink.cancel()
-//    }
