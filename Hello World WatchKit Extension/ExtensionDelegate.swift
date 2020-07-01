@@ -11,6 +11,10 @@ import WatchKit
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
 //    let data = HelloWorldData()
+    func applicationDidEnterBackground() {
+        // Schedule a background refresh task to update the complications.
+        scheduleBackgroundRefreshTasks()
+    }
     
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
@@ -32,6 +36,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             switch task {
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 // Be sure to complete the background task once you’re done.
+                print("it's starting.")
+                BackgroundService.shared.updateContent()
                 backgroundTask.setTaskCompletedWithSnapshot(false)
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 // Snapshot tasks have a unique completion call, make sure to set your expiration date
@@ -40,6 +46,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 // Be sure to complete the connectivity task once you’re done.
                 connectivityTask.setTaskCompletedWithSnapshot(false)
             case let urlSessionTask as WKURLSessionRefreshBackgroundTask:
+                BackgroundService.shared.handleDownload(urlSessionTask)
                 // Be sure to complete the URL session task once you’re done.
                 urlSessionTask.setTaskCompletedWithSnapshot(false)
             case let relevantShortcutTask as WKRelevantShortcutRefreshBackgroundTask:
@@ -52,6 +59,28 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 // make sure to complete unhandled task types
                 task.setTaskCompletedWithSnapshot(false)
             }
+        }
+    }
+    
+    func scheduleBackgroundRefreshTasks() {
+        print("SCHEDULING TASK NOWW")
+        // Get the shared extension object.
+        let watchExtension = WKExtension.shared()
+        
+        // If there is a complication on the watch face, the app should get at least four
+        // updates an hour. So calculate a target date 5 minutes in the future.
+        let targetDate = Date().addingTimeInterval(1.0 * 60.0)
+        
+        // Schedule the background refresh task.
+        watchExtension.scheduleBackgroundRefresh(withPreferredDate: targetDate, userInfo: nil) { (error) in
+            
+            // Check for errors.
+            if let error = error {
+                print("*** An background refresh error occurred: \(error.localizedDescription) ***")
+                return
+            }
+            
+            print("*** Background Task Completed Successfully! ***")
         }
     }
 

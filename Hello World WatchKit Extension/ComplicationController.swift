@@ -8,9 +8,25 @@
 
 import ClockKit
 
+let timeLeft: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "E, dd MMM yyyy HH:mm:ss Z"
+    //formatter2.dateFormat = "dd MM yyyy'T'HH:mm:ss'Z'"
+    formatter.timeZone = .current
+    print(formatter.timeZone!)
+    return formatter
+}()
+
+let formatter: DateFormatter = {
+    let formatter1 = DateFormatter()
+    formatter1.dateFormat = "hh:mm:ss"
+    return formatter1
+}()
+
 class ComplicationController: NSObject, CLKComplicationDataSource {
     
     let data = HelloWorldData()
+    lazy var data1 = FirebaseServices.shared
     //let model = FirebaseServices()
     //let title = model.data.mapValue.fields.title.stringValue
     
@@ -37,19 +53,24 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     // MARK: - Timeline Population
     
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
-        // Call the handler with the current timeline entry
+        
         if complication.family == .graphicRectangular {
-            let percentage: Float = 25/60
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "hh:mm:ss"
-            let timeString = dateFormatter.string(from: data.listOfData[0].startTime) + " - " + dateFormatter.string(from:  data.listOfData[0].endTime)
-            let graphicRectangular = CLKComplicationTemplateGraphicRectangularTextGauge()
-            graphicRectangular.headerTextProvider = CLKSimpleTextProvider(text: data.listOfData[0].name)
-            graphicRectangular.body1TextProvider = CLKSimpleTextProvider(text: timeString)
-            graphicRectangular.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColors: [UIColor.green], gaugeColorLocations: nil, fillFraction: percentage)
-            let template = graphicRectangular
-            let timelineEntry = CLKComplicationTimelineEntry(date: data.listOfData[0].startTime, complicationTemplate: template)
             
+            let percentage: Float = 25/60
+            
+            let time = timeLeft.date(from: data1.data![0].mapValue.fields.startDayAndTime.stringValue)
+            
+            let graphicRectangular = CLKComplicationTemplateGraphicRectangularTextGauge()
+            graphicRectangular.headerTextProvider = CLKSimpleTextProvider(text: data1.data![0].mapValue.fields.title.stringValue)
+            
+            graphicRectangular.body1TextProvider = CLKSimpleTextProvider(text: formatter.string(from: time!))
+            
+            graphicRectangular.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColors: [UIColor.green], gaugeColorLocations: nil, fillFraction: percentage)
+            
+            let template = graphicRectangular
+            let timelineEntry = CLKComplicationTimelineEntry(date: time!, complicationTemplate: template)
+            
+            print("Here.")
             handler(timelineEntry)
         }
         else {
@@ -57,10 +78,18 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         }
     }
     
-    private func createNewEntry(info: String, forComplication complication: CLKComplication, date: Date) {
+    /*
+    private func createTimelineEntry(forComplication complication: CLKComplication, date: Date) -> CLKComplicationTimelineEntry {
         
+        let template = createTemplate(forDate: date)
+        
+        return CLKComplicationTimelineEntry(date: date, complicationTemplate: template)
     }
     
+    private func createTemplate(forDate date: Date){
+        let complicationTitle = CLKSimpleTextProvider(text: data1.data![0].mapValue.fields.title.stringValue)
+    }
+ */
     func getTimelineEntries(for complication: CLKComplication,
                             after date: Date,
                             limit: Int,
@@ -69,20 +98,24 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         var timeLineEntries = [CLKComplicationTimelineEntry]()
         
-        for index in 1...(data.listOfData.count-1) {
-            let percentage: Float = 25/60
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "hh:mm:ss"
-            let timeString = dateFormatter.string(from: data.listOfData[index].startTime) + " - " + dateFormatter.string(from:  data.listOfData[index].endTime)
+        for index in 1...(data1.data!.count-1) {
+             let percentage: Float = 25/60
+                       
+            let time = timeLeft.date(from: data1.data![index].mapValue.fields.startDayAndTime.stringValue)
+                       
             let graphicRectangular = CLKComplicationTemplateGraphicRectangularTextGauge()
-            graphicRectangular.headerTextProvider = CLKSimpleTextProvider(text: data.listOfData[index].name)
-            graphicRectangular.body1TextProvider = CLKSimpleTextProvider(text: timeString)
+                    graphicRectangular.headerTextProvider = CLKSimpleTextProvider(text: data1.data![index].mapValue.fields.title.stringValue)
+                       
+            graphicRectangular.body1TextProvider = CLKSimpleTextProvider(text: formatter.string(from: time!))
+                       
             graphicRectangular.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColors: [UIColor.green], gaugeColorLocations: nil, fillFraction: percentage)
+                       
             let template = graphicRectangular
-            let timelineEntry = CLKComplicationTimelineEntry(date: data.listOfData[index].startTime, complicationTemplate: template)
+            let timelineEntry = CLKComplicationTimelineEntry(date: time!, complicationTemplate: template)
+                       
+            print("Here.")
             timeLineEntries.append(timelineEntry)
         }
-        
         handler(timeLineEntries)
     }
     

@@ -11,7 +11,7 @@ import SwiftUI
 import Combine
 import ClockKit
 
-class Data: ObservableObject {
+class Data1: ObservableObject {
     public let name: String
     public let startTime: Date
     public let endTime: Date
@@ -25,18 +25,18 @@ class Data: ObservableObject {
 
 class HelloWorldData: ObservableObject {
     
-    public var listOfData = [Data]()
+    public var listOfData = [Data1]()
     
     init() {
         let date = Date()
         
-        let data1 = Data(name: "Goal 1", startTime: date, endTime: date.advanced(by: 30))
+        let data1 = Data1(name: "Goal 1", startTime: date, endTime: date.advanced(by: 30))
         self.listOfData.append(data1)
         
-        let data2 = Data(name: "Goal 2", startTime: date.advanced(by: 30), endTime: date.advanced(by: 60))
+        let data2 = Data1(name: "Goal 2", startTime: date.advanced(by: 30), endTime: date.advanced(by: 60))
         self.listOfData.append(data2)
         
-        let data3 = Data(name: "Goal 3", startTime: date.advanced(by: 60), endTime: date.advanced(by: 90))
+        let data3 = Data1(name: "Goal 3", startTime: date.advanced(by: 60), endTime: date.advanced(by: 90))
         self.listOfData.append(data3)
     }
 }
