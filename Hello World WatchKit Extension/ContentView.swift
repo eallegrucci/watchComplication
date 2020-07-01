@@ -8,21 +8,55 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    //let data = HelloWorldData()
+struct TasksView: View {
+    @ObservedObject private var model = FirebaseServices.shared
+    var goalID: String
     
-    @EnvironmentObject var model: FirebaseServices
+    var body: some View{
+        ZStack{
+            if (self.model.goalsSubtasks[self.goalID] == nil) {
+                Text("Oops! No actions and tasks found!")
+            }
+            else {
+                List {
+                    ForEach(self.model.goalsSubtasks[self.goalID]!!, id: \.mapValue.fields.id.stringValue) { item in
+                        VStack(alignment: .leading) {
+                            if item.mapValue.fields.isAvailable.booleanValue {
+                                if item.mapValue.fields.photo.stringValue != "" {
+                                    HStack {
+                                        Text(item.mapValue.fields.title.stringValue)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct ContentView: View {
+    //let model = FirebaseServices.shared
+    @ObservedObject private var model = FirebaseServices.shared
     //model.getFirebaseTasks()
     var body: some View {
         //Text(data.name)
         VStack{
-        List {
-            ForEach(self.model.data.filter{!($0.mapValue.fields.isPersistent.booleanValue)}, id: \.mapValue.fields.id.stringValue) { item in
-                VStack(alignment: .leading) {
-                    if item.mapValue.fields.isAvailable.booleanValue {
-                        if item.mapValue.fields.photo.stringValue != "" {
-                                HStack {
-                                    Text(item.mapValue.fields.title.stringValue)
+            List {
+                if (self.model.data == nil){
+                    Text("Oops")
+                }
+                else{
+                    ForEach(self.model.data!.filter{!($0.mapValue.fields.isPersistent.booleanValue)}, id: \.mapValue.fields.id.stringValue) { item in
+                    VStack(alignment: .leading) {
+                        if item.mapValue.fields.isAvailable.booleanValue {
+                            if item.mapValue.fields.photo.stringValue != "" {
+                                NavigationLink(destination: TasksView(goalID: item.mapValue.fields.id.stringValue)){
+                                    HStack {
+                                        Text(item.mapValue.fields.title.stringValue)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -35,6 +69,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environmentObject(FirebaseServices())
+        ContentView()//.environmentObject(FirebaseServices())
     }
 }

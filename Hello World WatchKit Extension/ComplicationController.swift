@@ -12,6 +12,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     let data = HelloWorldData()
     //let model = FirebaseServices()
+    //let title = model.data.mapValue.fields.title.stringValue
     
     // MARK: - Timeline Configuration
     func getSupportedTimeTravelDirections(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimeTravelDirections) -> Void) {
@@ -65,23 +66,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                             limit: Int,
                             withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
         print("getTimelineEntries")
-//        let fiveMinutes = 10 * 60.0
-//        let oneHour = 60.0 * 60.0
-//
-//        // Create an array to hold the timeline entries.
-//        var entries = [CLKComplicationTimelineEntry]()
-//
-//        // Calculate the start and end dates.
-//        var current = date.addingTimeInterval(fiveMinutes)
-//        let endDate = date.addingTimeInterval(oneHour + (2*fiveMinutes))
-//
-//        // Create a timeline entry for every five minutes from the starting time.
-//        // Stop once you reach the limit or the end date.
-//
-//        while (current.compare(endDate) == .orderedAscending) && (entries.count < limit) {
-//            entries.append(createTimelineEntry(forComplication: complication, date: current))
-//            current = current.addingTimeInterval(fiveMinutes)
-//        }
+        
         var timeLineEntries = [CLKComplicationTimelineEntry]()
         
         for index in 1...(data.listOfData.count-1) {
