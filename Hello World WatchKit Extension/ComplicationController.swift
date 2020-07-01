@@ -111,54 +111,15 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 //        let future = Date().addingTimeInterval(25.0 * 60.0 * 60.0)
 //        let template = createTemplate(forComplication: complication, date: future)
 //        handler(template)
-        var template: CLKComplicationTemplate?
-            switch complication.family {
-            case .modularSmall:
-//                let modularSmallTemplate =
-//                    CLKComplicationTemplateModularSmallRingText()
-//                modularSmallTemplate.textProvider =
-//                    CLKSimpleTextProvider(text: "R")
-//                modularSmallTemplate.fillFraction = 0.75
-//                modularSmallTemplate.ringStyle = CLKComplicationRingStyle.closed
-                template = nil
-            case .modularLarge:
-//                let modularLargeTemplate =
-//                    CLKComplicationTemplateModularLargeStandardBody()
-//                modularLargeTemplate.headerTextProvider =
-//                    CLKTimeIntervalTextProvider(start: NSDate() as Date,
-//                                                end: NSDate(timeIntervalSinceNow: 1.5 * HOUR) as Date)
-//                modularLargeTemplate.body1TextProvider =
-//                    CLKSimpleTextProvider(text: "Movie Name",
-//                        shortText: "Movie")
-//                modularLargeTemplate.body2TextProvider =
-//                    CLKSimpleTextProvider(text: "Running Time",
-//                        shortText: "Time")
-                template = nil
-            case .utilitarianSmall:
-                template = nil
-            case .utilitarianLarge:
-                template = nil
-            case .circularSmall:
-                template = nil
-            case .utilitarianSmallFlat:
-                template = nil
-            case .extraLarge:
-                template = nil
-            case .graphicCorner:
-                template = nil
-            case .graphicBezel:
-                template = nil
-            case .graphicCircular:
-                template = nil
-            case .graphicRectangular:
-                let graphicRectangular = CLKComplicationTemplateGraphicRectangularTextGauge()
-                graphicRectangular.headerTextProvider = CLKSimpleTextProvider(text: "Goal")
-                graphicRectangular.body1TextProvider = CLKSimpleTextProvider(text: "Time - Time")
-                graphicRectangular.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColors: [UIColor.green], gaugeColorLocations: nil, fillFraction: Float())
-                template = graphicRectangular
-            @unknown default:
-                template = nil
+//        var template: CLKComplicationTemplate?
+        if complication.family == .graphicRectangular{
+            let graphicRectangular = CLKComplicationTemplateGraphicRectangularTextGauge()
+            graphicRectangular.headerTextProvider = CLKSimpleTextProvider(text: "Goal")
+            graphicRectangular.body1TextProvider = CLKSimpleTextProvider(text: "Time - Time")
+            graphicRectangular.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColors: [UIColor.green], gaugeColorLocations: nil, fillFraction: Float())
+            handler(graphicRectangular)
+        } else {
+            handler(nil)
         }
-        handler(template)
     }
 }
