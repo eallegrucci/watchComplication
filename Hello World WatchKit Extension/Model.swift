@@ -250,36 +250,52 @@ struct StickyFields: Codable {
 
 class FirebaseServices: ObservableObject{
     
-    @Published var data = [Value]()
-    //@Published var goalsSubtasks = [String: ValueTask]()
-    init() {
+    static let shared = FirebaseServices()
+    
+    @Published var data: [Value]?
+    private var task: [ValueTask]?
+    @Published var goalsSubtasks = [String: [ValueTask]?]()
+    
+     private init() {
         getFirebaseData(){
             (data) in self.data = data
+            if let data = data {
+                for goal in data {
+                    self.getFirebaseTasks(goalID: goal.mapValue.fields.id.stringValue){
+                        (task) in self.task = task
+                        if let task = task {
+                            self.goalsSubtasks[goal.mapValue.fields.id.stringValue] = task
+                        }
+                    }
+                    self.task = []
+                }
+            }
         }
     }
     
-    func getFirebaseData(completion: @escaping ([Value]) -> ()) {
+    func getFirebaseData(completion: @escaping ([Value]?) -> ()) {
             guard let url = URL(string: "https://firestore.googleapis.com/v1/projects/project-caitlin-c71a9/databases/(default)/documents/users/anaqPz2mmo3tSGU4lgB4") else { return }
             print("here")
             URLSession.shared.dataTask(with: url) { (data, _, _) in
-                let data = try! JSONDecoder().decode(Firebase.self, from: data!)
+                let data = try? JSONDecoder().decode(Firebase.self, from: data!)
                 DispatchQueue.main.async {
-                    completion(data.fields.goalsRoutines.arrayValue.values)
+                    completion(data?.fields.goalsRoutines.arrayValue.values ?? nil)
                 }
             }
         .resume()
     }
     
-    func getFirebaseTasks(goalID: String, completion: @escaping ([ValueTask]) -> ()) {
+    func getFirebaseTasks(goalID: String, completion: @escaping ([ValueTask]?) -> ()) {
+        print("here in task")
         var TaskUrl = "https://firestore.googleapis.com/v1/projects/project-caitlin-c71a9/databases/(default)/documents/users/anaqPz2mmo3tSGU4lgB4/goals&routines/"
         TaskUrl.append(goalID)
         print(TaskUrl)
         guard let url = URL(string: TaskUrl) else { return }
             
             URLSession.shared.dataTask(with: url) { (data, _, _) in
-                let data = try! JSONDecoder().decode(FirebaseTask.self, from: data!)
+                let data = try? JSONDecoder().decode(FirebaseTask.self, from: data!)
                 DispatchQueue.main.async {
-                    completion(data.fields.actionsTasks.arrayValue.values)
+                    completion(data?.fields.actionsTasks.arrayValue.values ?? nil)
                 }
             }
         .resume()

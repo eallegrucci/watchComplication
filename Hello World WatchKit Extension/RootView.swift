@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct RootView: View {
-    @State private var model = FirebaseServices()
+    //@State private var model = FirebaseServices.shared
     var body: some View {
-        ContentView().environmentObject(model)
+        ContentView()//.environmentObject(model)
     }
 }
 

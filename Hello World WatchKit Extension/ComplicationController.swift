@@ -11,6 +11,8 @@ import ClockKit
 class ComplicationController: NSObject, CLKComplicationDataSource {
     
     let data = HelloWorldData()
+    //let model = FirebaseServices()
+    //let title = model.data.mapValue.fields.title.stringValue
     
     // MARK: - Timeline Configuration
     func getSupportedTimeTravelDirections(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimeTravelDirections) -> Void) {
