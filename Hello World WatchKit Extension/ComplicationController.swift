@@ -68,9 +68,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             graphicRectangular.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColors: [UIColor.green], gaugeColorLocations: nil, fillFraction: percentage)
             
             let template = graphicRectangular
-            let timelineEntry = CLKComplicationTimelineEntry(date: time!, complicationTemplate: template)
+            let timelineEntry = CLKComplicationTimelineEntry(date: (time?.addingTimeInterval(-60.0))!, complicationTemplate: template)
             
-            print("Here.")
+            print("Here: \(data1.data![0].mapValue.fields.title.stringValue)")
             handler(timelineEntry)
         }
         else {
@@ -99,7 +99,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         var timeLineEntries = [CLKComplicationTimelineEntry]()
         
         for index in 1...(data1.data!.count-1) {
-             let percentage: Float = 25/60
+            let percentage: Float = 25/60
                        
             let time = timeLeft.date(from: data1.data![index].mapValue.fields.startDayAndTime.stringValue)
                        
@@ -111,9 +111,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             graphicRectangular.gaugeProvider = CLKSimpleGaugeProvider(style: .fill, gaugeColors: [UIColor.green], gaugeColorLocations: nil, fillFraction: percentage)
                        
             let template = graphicRectangular
-            let timelineEntry = CLKComplicationTimelineEntry(date: time!, complicationTemplate: template)
+            let timelineEntry = CLKComplicationTimelineEntry(date: (time?.addingTimeInterval(-60.0))!, complicationTemplate: template)
                        
-            print("Here.")
+            print("Here: \(data1.data![index].mapValue.fields.title.stringValue)")
             timeLineEntries.append(timelineEntry)
         }
         handler(timeLineEntries)
