@@ -185,6 +185,7 @@ struct FluffyFields: Codable {
     var isAvailable: HavePic
     var startDayAndTime: EmailID
     var endDayAndTime: EmailID
+    var isDisplayedToday: HavePic
 
     enum CodingKeys: String, CodingKey {
         case isSublistAvailable = "is_sublist_available"
@@ -205,6 +206,7 @@ struct FluffyFields: Codable {
         case isAvailable = "is_available"
         case startDayAndTime = "start_day_and_time"
         case endDayAndTime = "end_day_and_time"
+        case isDisplayedToday = "is_displayed_today"
     }
 }
 
@@ -275,7 +277,7 @@ class FirebaseServices: ObservableObject {
     }
     
     func getFirebaseData(completion: @escaping ([Value]?) -> ()) {
-            guard let url = URL(string: "https://firestore.googleapis.com/v1/projects/project-caitlin-c71a9/databases/(default)/documents/users/anaqPz2mmo3tSGU4lgB4") else { return }
+            guard let url = URL(string: "https://firestore.googleapis.com/v1/projects/project-caitlin-c71a9/databases/(default)/documents/users/VzYNSZMGGRrtzm74zPmM") else { return }
             print("here")
             URLSession.shared.dataTask(with: url) { (data, _, _) in
                 let data = try? JSONDecoder().decode(Firebase.self, from: data!)
@@ -288,7 +290,7 @@ class FirebaseServices: ObservableObject {
     
     func getFirebaseTasks(goalID: String, completion: @escaping ([ValueTask]?) -> ()) {
         print("here in task")
-        var TaskUrl = "https://firestore.googleapis.com/v1/projects/project-caitlin-c71a9/databases/(default)/documents/users/anaqPz2mmo3tSGU4lgB4/goals&routines/"
+        var TaskUrl = "https://firestore.googleapis.com/v1/projects/project-caitlin-c71a9/databases/(default)/documents/users/VzYNSZMGGRrtzm74zPmM/goals&routines/"
         TaskUrl.append(goalID)
         print(TaskUrl)
         guard let url = URL(string: TaskUrl) else { return }
@@ -305,12 +307,12 @@ class FirebaseServices: ObservableObject {
 
 class BackgroundService: NSObject {
     static let shared = BackgroundService()
-    static let url = URL(string: "https://firestore.googleapis.com/v1/projects/project-caitlin-c71a9/databases/(default)/documents/users/anaqPz2mmo3tSGU4lgB4")!
+    static let url = URL(string: "https://firestore.googleapis.com/v1/projects/project-caitlin-c71a9/databases/(default)/documents/users/VzYNSZMGGRrtzm74zPmM")!
     
     // Store tasks in order to complete them when finished
     var pendingBackgroundTasks = [WKURLSessionRefreshBackgroundTask]()
     
-    func updateContent() {
+    func updateContent(completion: () -> ()) {
         let configuration = URLSessionConfiguration
             .background(withIdentifier: "complicationUpdate")
         

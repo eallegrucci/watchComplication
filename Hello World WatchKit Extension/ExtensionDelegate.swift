@@ -37,7 +37,9 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 // Be sure to complete the background task once you’re done.
                 print("it's starting.")
-                BackgroundService.shared.updateContent()
+                BackgroundService.shared.updateContent() {
+                    print("DOWNLOAD COMPLETED")
+                }
                 scheduleBackgroundRefreshTasks()
                 backgroundTask.setTaskCompletedWithSnapshot(false)
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
@@ -71,7 +73,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         
         // If there is a complication on the watch face, the app should get at least four
         // updates an hour. So calculate a target date 5 minutes in the future.
-        let targetDate = Date().addingTimeInterval(60.0 * 60.0)
+        let targetDate = Date().addingTimeInterval(1.0 * 60.0)
         
         // Schedule the background refresh task.
         watchExtension.scheduleBackgroundRefresh(withPreferredDate: targetDate, userInfo: nil) { (error) in
